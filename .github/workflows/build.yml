@@ -11,12 +11,7 @@ jobs:
       - name: Create placeholder Secrets.swift
         run: |
           mkdir -p Source/Application
-          cat > Source/Application/Secrets.swift <<'EOF'
-enum Secrets {
-    static let dropboxAppKey = ""
-    static let dropboxAppSecret = ""
-}
-EOF
+          echo 'enum Secrets { static let dropboxAppKey = ""; static let dropboxAppSecret = "" }' > Source/Application/Secrets.swift
           ls -la Source/Application
 
       - name: Build Xcode project
