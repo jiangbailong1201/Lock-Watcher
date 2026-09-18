@@ -12,13 +12,12 @@ jobs:
         run: |
           mkdir -p Source/Application
           cat > Source/Application/Secrets.swift <<'EOF'
-// Auto generated placeholder for CI build
+// CI占位文件，无真实Dropbox密钥
 enum Secrets {
     static let dropboxAppKey = ""
     static let dropboxAppSecret = ""
 }
 EOF
-          echo "==== Check created file ===="
           ls -la Source/Application
 
       - name: Build Xcode project
