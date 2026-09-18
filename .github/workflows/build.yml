@@ -1,0 +1,37 @@
+name: Build Lock-Watcher (non-mas)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build non-mas scheme
+        run: |
+          xcodebuild \
+            -project Lock-Watcher.xcodeproj \
+            -scheme Lock-Watcher-non-mas \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          cp -R build/Build/Products/Release/Lock-Watcher.app dist/
+          ditto -c -k --keepParent dist/Lock-Watcher.app dist/Lock-Watcher-non-mas.zip
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lock-Watcher-non-mas
+          path: dist/Lock-Watcher-non-mas.zip
