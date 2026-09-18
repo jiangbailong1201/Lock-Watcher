@@ -1,36 +1,10 @@
-name: Build Lock-Watcher (non-mas)
-on:
-  push:
-    branches: [ master ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: macos-15
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Build non-mas scheme
+      - name: Create placeholder Secrets.swift
         run: |
-          xcodebuild \
-            -project Lock-Watcher.xcodeproj \
-            -scheme Lock-Watcher-non-mas \
-            -configuration Release \
-            -derivedDataPath build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            build
-
-      - name: Package app
-        run: |
-          mkdir -p dist
-          cp -R build/Build/Products/Release/Lock-Watcher.app dist/
-          ditto -c -k --keepParent dist/Lock-Watcher.app dist/Lock-Watcher-non-mas.zip
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Lock-Watcher-non-mas
-          path: dist/Lock-Watcher-non-mas.zip
+          mkdir -p Source/Application
+          cat > Source/Application/Secrets.swift << EOF
+          // Auto generated placeholder for CI build
+          enum Secrets {
+              static let dropboxAppKey = ""
+              static let dropboxAppSecret = ""
+          }
+          EOF
