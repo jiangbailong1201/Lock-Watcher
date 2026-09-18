@@ -1,10 +1,32 @@
+name: Build
+on: push
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Create placeholder Secrets.swift
         run: |
           mkdir -p Source/Application
-          cat > Source/Application/Secrets.swift << EOF
-          // Auto generated placeholder for CI build
-          enum Secrets {
-              static let dropboxAppKey = ""
-              static let dropboxAppSecret = ""
-          }
-          EOF
+          cat > Source/Application/Secrets.swift <<'EOF'
+// Auto generated placeholder for CI build
+enum Secrets {
+    static let dropboxAppKey = ""
+    static let dropboxAppSecret = ""
+}
+EOF
+          echo "==== Check created file ===="
+          ls -la Source/Application
+
+      - name: Build Xcode project
+        run: |
+          xcodebuild -project Lock-Watcher.xcodeproj \
+            -scheme Lock-Watcher-non-mas \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
