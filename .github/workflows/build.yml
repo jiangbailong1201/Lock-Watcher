@@ -29,3 +29,18 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Package app
+        run: |
+          mkdir -p dist
+          ditto -c -k --keepParent \
+            "build/Build/Products/Release/Lock-Watcher-non-mas.app" \
+            dist/Lock-Watcher-non-mas.zip
+          ls -la dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lock-Watcher-non-mas
+          path: dist/Lock-Watcher-non-mas.zip
+          retention-days: 30
