@@ -32,7 +32,9 @@ extension TriggerType {
 /// Represents a data object that captures information during a trigger action.
 /// This object might be used when there's suspicion of unauthorized access or other security breaches.
 ///
-public final class ThiefDto: Equatable, Sendable {
+/// - Note: `@unchecked Sendable` is required because `NSImage` is not `Sendable`;
+///   the snapshot is created and consumed within the same main-actor flow.
+public final class ThiefDto: Equatable, @unchecked Sendable {
     /// Equatability implementation for the ThiefDto class.
     public static func == (lhs: ThiefDto, rhs: ThiefDto) -> Bool {
         lhs.date == rhs.date

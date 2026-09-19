@@ -266,7 +266,7 @@ final class ThiefManager: NSObject, ThiefManagerProtocol {
 }
 
 /// Location Manager Delegate Methods
-extension ThiefManager: @MainActor CLLocationManagerDelegate {
+extension ThiefManager: @preconcurrency CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         coordinate = locations.last?.coordinate
     }
@@ -295,7 +295,7 @@ extension ThiefManager: @MainActor CLLocationManagerDelegate {
 }
 
 /// User Notification Center Delegate Methods:
-extension ThiefManager: @MainActor UNUserNotificationCenterDelegate {
+extension ThiefManager: @preconcurrency UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ centre: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         let identifier = response.notification.request.identifier
         showSnapshot(identifier: identifier)
